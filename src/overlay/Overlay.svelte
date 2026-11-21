@@ -4,6 +4,7 @@
   import { getCurrentWebview } from "@tauri-apps/api/webview";
   import { emit } from "@tauri-apps/api/event";
   import Icon from "../components/Icon.svelte";
+  import LogoLoader from "../components/LogoLoader.svelte";
   import MenuHost from "../components/MenuHost.svelte";
   import Toasts from "../components/Toasts.svelte";
   import Slider from "../components/Slider.svelte";
@@ -242,7 +243,7 @@
   {/if}
 
   {#if busy && !player.error}
-    <div class="spinner" in:fade={{ duration: 150, delay: 250 }}><Icon name="loader-circle" size={44} stroke={1.6} /></div>
+    <div class="spinner" in:fade={{ duration: 150, delay: 250 }}><LogoLoader size={player.pip ? 40 : 72} /></div>
   {/if}
 
   {#if player.error}
@@ -489,9 +490,7 @@
     color: rgba(255, 255, 255, 0.9);
     pointer-events: none;
   }
-  .spinner :global(svg) {
-    animation: spin 0.9s linear infinite;
-  }
+
   @keyframes spin {
     to {
       transform: rotate(360deg);

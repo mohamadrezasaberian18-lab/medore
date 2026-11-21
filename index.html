@@ -4,8 +4,137 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MEDORE</title>
+    <style>
+      /* Opening animation: shown instantly, before any script loads. */
+      #splash {
+        position: fixed;
+        inset: 0;
+        z-index: 2000;
+        display: grid;
+        place-items: center;
+        background: #080808;
+        transition: opacity 420ms cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      #splash.out {
+        opacity: 0;
+        pointer-events: none;
+      }
+      #splash .wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 26px;
+      }
+      #splash svg {
+        width: 132px;
+        height: 106px;
+        overflow: visible;
+      }
+      #splash .part {
+        opacity: 0;
+        transform-box: fill-box;
+        animation: sp-in 700ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      }
+      #splash .back {
+        transform-origin: right top;
+        animation-name: sp-back;
+        animation-delay: 220ms;
+      }
+      #splash .front {
+        transform-origin: left top;
+        animation-name: sp-front;
+        animation-delay: 60ms;
+      }
+      #splash .leg {
+        transform-origin: center bottom;
+        animation-name: sp-leg;
+        animation-delay: 380ms;
+      }
+      #splash .tri {
+        transform-origin: center;
+        animation-name: sp-tri;
+        animation-duration: 560ms;
+        animation-delay: 640ms;
+        animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+      #splash .shine {
+        opacity: 0;
+        animation: sp-shine 1100ms 900ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+      #splash .word {
+        font: 700 20px "Segoe UI Variable Display", "Segoe UI", sans-serif;
+        letter-spacing: 0.62em;
+        margin-left: 0.62em;
+        color: #fff;
+        opacity: 0;
+        animation: sp-word 800ms 900ms cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+      }
+      @keyframes sp-front {
+        from { opacity: 0; transform: translate(-18%, -14%) scale(0.92); }
+        to { opacity: 1; transform: none; }
+      }
+      @keyframes sp-back {
+        from { opacity: 0; transform: translate(16%, -10%) scale(0.92); }
+        to { opacity: 1; transform: none; }
+      }
+      @keyframes sp-leg {
+        from { opacity: 0; transform: translateY(26%) scaleY(0.7); }
+        to { opacity: 1; transform: none; }
+      }
+      @keyframes sp-tri {
+        from { opacity: 0; transform: scale(0.2); }
+        to { opacity: 1; transform: none; }
+      }
+      @keyframes sp-shine {
+        0% { opacity: 0; transform: translateX(-700px) skewX(-18deg); }
+        30% { opacity: 1; }
+        100% { opacity: 0; transform: translateX(700px) skewX(-18deg); }
+      }
+      @keyframes sp-word {
+        from { opacity: 0; letter-spacing: 1.1em; }
+        to { opacity: 0.92; letter-spacing: 0.62em; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #splash .part, #splash .word { animation: none; opacity: 1; }
+        #splash .shine { display: none; }
+      }
+    </style>
   </head>
   <body>
+    <div id="splash" aria-hidden="true">
+      <div class="wrap">
+        <svg viewBox="120 200 750 600" role="img">
+          <defs>
+            <linearGradient id="sp-front" gradientUnits="userSpaceOnUse" x1="160" y1="230" x2="660" y2="520"><stop offset="0" stop-color="#fff"/><stop offset=".55" stop-color="#F1F1F3"/><stop offset="1" stop-color="#C9C9CE"/></linearGradient>
+            <linearGradient id="sp-back" gradientUnits="userSpaceOnUse" x1="520" y1="500" x2="830" y2="240"><stop offset="0" stop-color="#5E5E64"/><stop offset=".42" stop-color="#B9B9BF"/><stop offset="1" stop-color="#F6F6F8"/></linearGradient>
+            <linearGradient id="sp-rleg" gradientUnits="userSpaceOnUse" x1="0" y1="360" x2="0" y2="770"><stop offset="0" stop-color="#E6E6E9" stop-opacity="0"/><stop offset=".22" stop-color="#E6E6E9" stop-opacity="0"/><stop offset=".42" stop-color="#E6E6E9"/><stop offset="1" stop-color="#9C9CA2"/></linearGradient>
+            <linearGradient id="sp-lleg" gradientUnits="userSpaceOnUse" x1="250" y1="395" x2="170" y2="770"><stop offset="0" stop-color="#606066"/><stop offset=".3" stop-color="#C6C6CB"/><stop offset="1" stop-color="#F4F4F6"/></linearGradient>
+            <linearGradient id="sp-tri" gradientUnits="userSpaceOnUse" x1="450" y1="580" x2="580" y2="730"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#D6D6DA"/></linearGradient>
+            <linearGradient id="sp-shine-g" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+            <clipPath id="sp-clip">
+              <path d="M505 372 C620 300 700 228 760 228 C815 228 845 262 845 321 L845 695 A75 75 0 0 1 695 695 L695 427 L505 527 Z"/>
+              <path d="M150 480 L150 321 C150 262 180 228 236 228 C275 228 300 236 330 252 L669 441 L505 527 L305 418 L305 480 Z"/>
+              <rect x="143" y="395" width="169" height="382" rx="84.5"/>
+              <path d="M436 574 L436 742 L600 658 Z"/>
+            </clipPath>
+          </defs>
+          <g class="part back">
+            <path d="M505 372 C620 300 700 228 760 228 C815 228 845 262 845 321 L845 695 A75 75 0 0 1 695 695 L695 427 L505 527 Z" fill="url(#sp-back)" stroke="url(#sp-back)" stroke-width="14" stroke-linejoin="round"/>
+            <path d="M695 360 L845 360 L845 695 A75 75 0 0 1 695 695 Z" fill="url(#sp-rleg)" stroke="url(#sp-rleg)" stroke-width="14" stroke-linejoin="round"/>
+          </g>
+          <path class="part front" d="M150 480 L150 321 C150 262 180 228 236 228 C275 228 300 236 330 252 L669 441 L505 527 L305 418 L305 480 Z" fill="url(#sp-front)" stroke="url(#sp-front)" stroke-width="14" stroke-linejoin="round"/>
+          <rect class="part leg" x="143" y="395" width="169" height="382" rx="84.5" fill="url(#sp-lleg)"/>
+          <path class="part tri" d="M452 590 L452 726 L582 658 Z" fill="url(#sp-tri)" stroke="url(#sp-tri)" stroke-width="34" stroke-linejoin="round"/>
+          <g clip-path="url(#sp-clip)"><rect class="shine" x="80" y="180" width="260" height="660" fill="url(#sp-shine-g)" transform="skewX(-18)"/></g>
+        </svg>
+        <div class="word">MEDORE</div>
+      </div>
+    </div>
+    <script>
+      // the controls window has no opening animation
+      if (location.hash === "#overlay") document.getElementById("splash").remove();
+      window.__splashStart = performance.now();
+    </script>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>

@@ -233,6 +233,54 @@ impl Library {
         self.touch();
     }
 
+    /// A picture for "Continue watching" when the file is not in the library.
+    pub fn thumb_for_progress(self: &Arc<Self>, path: &str) {
+        let id = media_id(path);
+        {
+            let d = self.data.read();
+            if d.items.get(&id).map(|i| i.thumb.is_some()).unwrap_or(false) {
+                return;
+            }
+            if d.progress.get(&id).and_then(|p| p.thumb.as_ref()).map(|t| Path::new(t).exists()).unwrap_or(false) {
+                return;
+            }
+        }
+        if !self.settings.bool("library.thumbnails") {
+            return;
+        }
+        let me = self.clone();
+        let path = path.to_string();
+        std::thread::spawn(move || {
+            lower_thread_priority();
+            let Ok(mut g) = FrameGrabber::new() else { return };
+            let Some(info) = g.open(&path, Duration::from_secs(10)) else { return };
+            if !info.has_video || info.duration <= 0.0 {
+                return;
+            }
+            let mut frame = None;
+            for frac in [0.12, 0.25, 0.4] {
+                if let Some(f) = g.grab(Some(info.duration * frac), 480, 270, false, Duration::from_secs(4)) {
+                    let keep = f.brightness() > 22.0;
+                    if frame.is_none() || keep {
+                        frame = Some(f);
+                    }
+                    if keep {
+                        break;
+                    }
+                }
+            }
+            let Some(jpg) = frame.and_then(|f| f.to_jpeg(82)) else { return };
+            let file = paths::cache_dir("thumbs").join(format!("{id}.jpg"));
+            if paths::write_atomic(&file, &jpg).is_err() {
+                return;
+            }
+            if let Some(p) = me.data.write().progress.get_mut(&id) {
+                p.thumb = Some(file.to_string_lossy().into_owned());
+            }
+            me.touch();
+        });
+    }
+
     pub fn set_watched(&self, ids: &[String], watched: bool) {
         let mut d = self.data.write();
         for id in ids {

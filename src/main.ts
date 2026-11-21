@@ -34,10 +34,25 @@ async function start() {
     mount(App, { target });
   }
   log("info", "mounted");
+  hideSplash();
+}
+
+/** Let the opening animation finish (about 1.6 s), then fade into the app. */
+function hideSplash() {
+  const el = document.getElementById("splash");
+  if (!el) return;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const elapsed = performance.now() - ((window as any).__splashStart ?? 0);
+  const wait = Math.max(0, (reduced ? 300 : 1700) - elapsed);
+  setTimeout(() => {
+    el.classList.add("out");
+    setTimeout(() => el.remove(), 450);
+  }, wait);
 }
 
 start().catch((e) => {
   log("error", `start failed: ${e?.stack ?? e}`);
+  document.getElementById("splash")?.remove();
   const box = document.getElementById("app");
   if (box && !isOverlay) {
     box.innerHTML = `<div style="height:100vh;display:grid;place-items:center;text-align:center;color:#a6a6a6;font:14px 'Segoe UI',sans-serif">

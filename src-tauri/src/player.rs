@@ -243,7 +243,8 @@ impl Player {
                 return;
             }
             st.last_save = Some(Instant::now());
-            (st.path.clone(), st.title.clone(), st.pos, st.duration)
+            let shown = st.props.get("medore-title").and_then(|v| v["title"].as_str()).map(str::to_string).unwrap_or_else(|| st.title.clone());
+            (st.path.clone(), shown, st.pos, st.duration)
         };
         let near_end = dur > 0.0 && (pos >= dur * 0.95 || (dur > 600.0 && dur - pos < 30.0));
         let done = finished || near_end;
@@ -346,7 +347,11 @@ impl Player {
             self.emit_prop("medore-title", &v);
         }
         let pos = self.mpv.get_f64("time-pos").unwrap_or(0.0);
-        self.library.set_progress(&path, &title, pos, duration, false, true);
+        let shown = self.display_title().unwrap_or_else(|| title.clone());
+        self.library.set_progress(&path, &shown, pos, duration, false, true);
+        if has_video && !formats::is_url(&path) {
+            self.library.thumb_for_progress(&path);
+        }
         self.emit_event(json!({"type": "file-loaded", "path": path, "title": title, "hasVideo": has_video}));
     }
 
@@ -461,6 +466,10 @@ impl Player {
         );
         let title = Path::new(path).file_name().map(|s| s.to_string_lossy().into_owned()).unwrap_or_default();
         self.mpv.command(&["sub-add", &prepared, "select", &title, lang.as_deref().unwrap_or("")])
+    }
+
+    fn display_title(&self) -> Option<String> {
+        self.st.lock().props.get("medore-title").and_then(|v| v["title"].as_str()).map(str::to_string)
     }
 
     pub fn snapshot(&self) -> Value {
