@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000" width="1000" height="1000">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#ECECEE"/>
+    </linearGradient>
+    <linearGradient id="front" gradientUnits="userSpaceOnUse" x1="160" y1="230" x2="660" y2="520">
+      <stop offset="0" stop-color="#0C0C0D"/>
+      <stop offset="0.6" stop-color="#1C1C1F"/>
+      <stop offset="1" stop-color="#3A3A3F"/>
+    </linearGradient>
+    <linearGradient id="back" gradientUnits="userSpaceOnUse" x1="520" y1="500" x2="830" y2="240">
+      <stop offset="0" stop-color="#9A9AA0"/>
+      <stop offset="0.42" stop-color="#3C3C41"/>
+      <stop offset="1" stop-color="#101012"/>
+    </linearGradient>
+    <linearGradient id="rleg" gradientUnits="userSpaceOnUse" x1="0" y1="360" x2="0" y2="770">
+      <stop offset="0" stop-color="#151517" stop-opacity="0"/>
+      <stop offset="0.22" stop-color="#151517" stop-opacity="0"/>
+      <stop offset="0.42" stop-color="#151517"/>
+      <stop offset="1" stop-color="#333338"/>
+    </linearGradient>
+    <linearGradient id="lleg" gradientUnits="userSpaceOnUse" x1="250" y1="395" x2="170" y2="770">
+      <stop offset="0" stop-color="#9C9CA2"/>
+      <stop offset="0.3" stop-color="#2E2E33"/>
+      <stop offset="1" stop-color="#0E0E10"/>
+    </linearGradient>
+    <linearGradient id="tri" gradientUnits="userSpaceOnUse" x1="450" y1="580" x2="580" y2="730">
+      <stop offset="0" stop-color="#0E0E10"/>
+      <stop offset="1" stop-color="#2E2E33"/>
+    </linearGradient>
+  </defs>
+  <rect width="1000" height="1000" rx="224" fill="url(#bg)"/>
+  <rect x="2" y="2" width="996" height="996" rx="222" fill="none" stroke="#000000" stroke-opacity="0.09" stroke-width="4"/>
+  <g transform="translate(50 46) scale(0.9)">
+    <path d="M505 372 C620 300 700 228 760 228 C815 228 845 262 845 321 L845 695 A75 75 0 0 1 695 695 L695 427 L505 527 Z"
+          fill="url(#back)" stroke="url(#back)" stroke-width="14" stroke-linejoin="round"/>
+    <path d="M695 360 L845 360 L845 695 A75 75 0 0 1 695 695 Z" fill="url(#rleg)" stroke="url(#rleg)" stroke-width="14" stroke-linejoin="round"/>
+    <path d="M150 480 L150 321 C150 262 180 228 236 228 C275 228 300 236 330 252 L669 441 L505 527 L305 418 L305 480 Z"
+          fill="url(#front)" stroke="url(#front)" stroke-width="14" stroke-linejoin="round"/>
+    <rect x="143" y="395" width="169" height="382" rx="84.5" fill="url(#lleg)"/>
+    <path d="M452 590 L452 726 L582 658 Z" fill="url(#tri)" stroke="url(#tri)" stroke-width="34" stroke-linejoin="round"/>
+  </g>
+</svg>

@@ -1,0 +1,249 @@
+/* MEDORE — Monochrome design system.
+   Tokens are the brand's; everything else derives from them. */
+:root {
+  --bg-primary: #080808;
+  --bg-icon: #101010;
+  --bg-surface: #171717;
+  --bg-elevated: #242424;
+  --bg-hover: #303030;
+  --border-subtle: #363636;
+  --text-primary: #ffffff;
+  --text-secondary: #a6a6a6;
+  --text-disabled: #666666;
+  --accent-primary: #e0e0e0;
+  --accent-hover: #ffffff;
+  --progress-active: #e0e0e0;
+  --progress-inactive: #363636;
+  --video-background: #000000;
+
+  /* derived */
+  --on-accent: #080808;
+  --hairline: rgba(255, 255, 255, 0.06);
+  --scrim: rgba(0, 0, 0, 0.6);
+  --glass: rgba(14, 14, 14, 0.78);
+  --glass-strong: rgba(18, 18, 18, 0.92);
+  --danger: #ff7a7a;
+  --success: #9be2b0;
+  --focus: #ffffff;
+
+  --r-s: 6px;
+  --r-m: 10px;
+  --r-l: 14px;
+  --r-xl: 20px;
+
+  --font: "Segoe UI Variable Text", "Segoe UI", "Vazirmatn", system-ui, sans-serif;
+  --font-display: "Segoe UI Variable Display", "Segoe UI", "Vazirmatn", system-ui, sans-serif;
+  --mono: "Cascadia Mono", Consolas, monospace;
+
+  --shadow-pop: 0 18px 50px rgba(0, 0, 0, 0.6), 0 2px 10px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.55);
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --t-fast: 120ms;
+  --t: 180ms;
+  --t-slow: 260ms;
+
+  color-scheme: dark;
+}
+
+:root:lang(fa) {
+  --font: "Vazirmatn", "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --font-display: "Vazirmatn", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
+}
+
+:root.reduce-motion {
+  --t-fast: 0ms;
+  --t: 0ms;
+  --t-slow: 0ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root:not(.motion-on) {
+    --t-fast: 0ms;
+    --t: 0ms;
+    --t-slow: 0ms;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+  -webkit-user-select: none;
+}
+body.main {
+  background: var(--bg-primary);
+}
+body.overlay {
+  background: transparent;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+button {
+  cursor: default;
+  border: 0;
+  background: none;
+  padding: 0;
+}
+input,
+textarea {
+  user-select: text;
+  -webkit-user-select: text;
+}
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+img {
+  -webkit-user-drag: none;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 8px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3d3d3d;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+}
+
+/* ---- shared controls --------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: var(--r-m);
+  font-weight: 600;
+  font-size: 13.5px;
+  white-space: nowrap;
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease),
+    box-shadow var(--t-fast) var(--ease);
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.btn.primary {
+  background: var(--accent-primary);
+  color: var(--on-accent);
+}
+.btn.primary:hover {
+  background: var(--accent-hover);
+}
+.btn.secondary {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+.btn.secondary:hover {
+  background: var(--bg-hover);
+}
+.btn.ghost {
+  color: var(--text-secondary);
+}
+.btn.ghost:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+.btn:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
+.btn.sm {
+  height: 30px;
+  padding: 0 12px;
+  font-size: 12.5px;
+}
+
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-m);
+  color: var(--text-secondary);
+  transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), transform var(--t-fast) var(--ease);
+}
+.icon-btn:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+.icon-btn:active {
+  transform: scale(0.92);
+}
+.icon-btn.on {
+  color: var(--text-primary);
+  background: var(--bg-elevated);
+}
+
+.field {
+  height: 36px;
+  border-radius: var(--r-m);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  padding: 0 12px;
+  transition: border-color var(--t-fast) var(--ease), background var(--t-fast) var(--ease);
+}
+.field:hover {
+  border-color: #474747;
+}
+.field:focus {
+  border-color: var(--accent-primary);
+  background: var(--bg-elevated);
+}
+
+.overline {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+:root:lang(fa) .overline {
+  letter-spacing: 0;
+}
+
+.muted {
+  color: var(--text-secondary);
+}
+.ellipsis {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.num {
+  font-variant-numeric: tabular-nums;
+}

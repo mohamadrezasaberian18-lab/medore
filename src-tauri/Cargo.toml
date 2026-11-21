@@ -1,0 +1,56 @@
+[package]
+name = "medore"
+version = "1.0.0"
+description = "MEDORE media player"
+authors = ["MEDORE contributors"]
+license = "GPL-3.0-or-later"
+edition = "2021"
+rust-version = "1.80"
+
+[lib]
+name = "medore_lib"
+crate-type = ["staticlib", "rlib"]
+
+[workspace]
+members = ["core"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["protocol-asset", "image-png"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+libloading = "0.8"
+parking_lot = "0.12"
+jpeg-encoder = "0.6"
+medore-core = { path = "core" }
+base64 = "0.22"
+log = { version = "0.4", features = ["std"] }
+ureq = { version = "3", default-features = false, features = ["native-tls", "gzip"] }
+tauri-plugin-dialog = "2"
+tauri-plugin-process = "2"
+tauri-plugin-single-instance = "2"
+tauri-plugin-updater = "2"
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.61", features = [
+    "Win32_Foundation",
+    "Win32_Graphics_Gdi",
+    "Win32_Graphics_Dwm",
+    "Win32_System_LibraryLoader",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_UI_Shell",
+    "Win32_System_Com",
+    "Win32_System_Registry",
+    "Win32_System_Threading",
+    "Win32_Security",
+    "Win32_Storage_FileSystem",
+] }
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true
